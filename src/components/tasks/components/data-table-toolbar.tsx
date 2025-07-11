@@ -1,18 +1,12 @@
 "use client";
 
-import { type Table } from "@tanstack/react-table";
 
-import { DataTableViewOptions } from "./data-table-view-options";
 import { Button } from "@/components/ui/button";
 import { IconDownload } from "@tabler/icons-react";
+import { DataTableFiltersDrawer } from "./data-table-filters-drawer";
 
-interface DataTableToolbarProps<TData> {
-  table: Table<TData>;
-}
 
-export function DataTableToolbar<TData>({
-  table,
-}: DataTableToolbarProps<TData>) {
+export function DataTableToolbar() {
   return (
     <div className="flex items-center justify-between">
       <div className="flex ml-auto items-center gap-2">
@@ -20,7 +14,7 @@ export function DataTableToolbar<TData>({
           <IconDownload />
           Descargar
         </Button>
-        <DataTableViewOptions table={table} />
+        <DataTableFiltersDrawer />
       </div>
     </div>
   );

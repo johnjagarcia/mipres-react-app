@@ -1,71 +1,67 @@
-import {
-  ArrowDown,
-  ArrowRight,
-  ArrowUp,
-  CheckCircle,
-  Circle,
-  CircleOff,
-  HelpCircle,
-  Timer,
-} from "lucide-react"
+import { CheckCircle, CircleOff, Timer } from "lucide-react";
+import tasksData from "./tasks.json";
 
-export const labels = [
-  {
-    value: "bug",
-    label: "Bug",
-  },
-  {
-    value: "feature",
-    label: "Feature",
-  },
-  {
-    value: "documentation",
-    label: "Documentation",
-  },
-]
+export const tasks = tasksData;
 
-export const statuses = [
+export const tipoTecOptions = [
   {
-    value: "backlog",
-    label: "Backlog",
-    icon: HelpCircle,
+    value: "M",
+    label: "Medicamento",
   },
   {
-    value: "todo",
-    label: "Todo",
-    icon: Circle,
+    value: "S",
+    label: "Servicio",
   },
+];
+
+export const estadoOptions = [
   {
-    value: "in progress",
-    label: "In Progress",
-    icon: Timer,
-  },
-  {
-    value: "done",
-    label: "Done",
+    value: "DIRECCIONADO",
+    label: "Direccionado",
     icon: CheckCircle,
   },
   {
-    value: "canceled",
-    label: "Canceled",
+    value: "PENDIENTE",
+    label: "Pendiente",
+    icon: Timer,
+  },
+  {
+    value: "ANULADO",
+    label: "Anulado",
     icon: CircleOff,
   },
-]
+];
 
-export const priorities = [
+export const tipoIdOptions = [
   {
-    label: "Low",
-    value: "low",
-    icon: ArrowDown,
+    value: "CC",
+    label: "Cédula de Ciudadanía",
   },
   {
-    label: "Medium",
-    value: "medium",
-    icon: ArrowRight,
+    value: "TI",
+    label: "Tarjeta de Identidad",
   },
   {
-    label: "High",
-    value: "high",
-    icon: ArrowUp,
+    value: "RC",
+    label: "Registro Civil",
   },
-]
+  {
+    value: "PT",
+    label: "Permiso Temporal",
+  },
+];
+
+export const epsOptions = [
+  {
+    value: "EPS010",
+    label: "EPS010",
+  },
+  {
+    value: "EPSS10",
+    label: "EPSS10",
+  },
+  {
+    value: "EPS008",
+    label: "EPS008",
+  },
+];
