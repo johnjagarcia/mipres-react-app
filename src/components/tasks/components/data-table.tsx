@@ -26,15 +26,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { ProcessFilters } from "@/services/processService";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onFiltersChange?: (filters: ProcessFilters) => void;
+  onPaginationChange?: (pageIndex: number, pageSize: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onFiltersChange,
+  onPaginationChange,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -55,7 +60,7 @@ export function DataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 25,
+        pageSize: 10,
       },
     },
     enableRowSelection: true,
@@ -71,9 +76,27 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  const handleFiltersChange = React.useCallback(
+    (newFilters: ProcessFilters) => {
+      if (onFiltersChange) {
+        onFiltersChange(newFilters);
+      }
+    },
+    [onFiltersChange]
+  );
+
+  const handlePaginationChange = React.useCallback(
+    (pageIndex: number, pageSize: number) => {
+      if (onPaginationChange) {
+        onPaginationChange(pageIndex, pageSize);
+      }
+    },
+    [onPaginationChange]
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      <DataTableToolbar />
+      <DataTableToolbar onFiltersChange={handleFiltersChange} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -117,14 +140,17 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No hay información para mostrar.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination
+        table={table}
+        onPaginationChange={handlePaginationChange}
+      />
     </div>
   );
 }

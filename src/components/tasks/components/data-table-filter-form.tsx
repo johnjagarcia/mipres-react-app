@@ -1,10 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -14,74 +9,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { tipoTecOptions, estadoOptions } from "../data/data";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { estadoOptions } from "../data/data";
+import type { useForm } from "react-hook-form";
 
-const FormSchema = z.object({
-  tipoTec: z.array(z.string()).optional(),
-  estado: z.array(z.string()).optional(),
-  fechaDesde: z.string().optional(),
-  fechaHasta: z.string().optional(),
-});
+interface FormSchema {
+  no_id_paciente?: string;
+  estado?: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
 
-export function DataTableFilterForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      tipoTec: [],
-      estado: [],
-      fechaDesde: "",
-      fechaHasta: "",
-    },
-  });
+interface DataTableFilterFormProps {
+  form: ReturnType<typeof useForm<FormSchema>>;
+}
 
+export function DataTableFilterForm({ form }: DataTableFilterFormProps) {
   return (
     <Form {...form}>
       <form className="space-y-6">
-        {/* Tipo de Técnica */}
+        {/* ID del Paciente */}
         <FormField
           control={form.control}
-          name="tipoTec"
-          render={() => (
+          name="no_id_paciente"
+          render={({ field }) => (
             <FormItem>
-              <div className="mb-4">
-                <FormLabel className="text-base">Tipo de Técnica</FormLabel>
-              </div>
-              {tipoTecOptions.map((option) => (
-                <FormField
-                  key={option.value}
-                  control={form.control}
-                  name="tipoTec"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={option.value}
-                        className="flex flex-row items-center gap-2"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(option.value)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([
-                                    ...(field.value || []),
-                                    option.value,
-                                  ])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== option.value
-                                    ) || []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {option.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
+              <FormLabel className="text-base">ID del Paciente</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el ID del paciente" {...field} />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -90,47 +53,24 @@ export function DataTableFilterForm() {
         <FormField
           control={form.control}
           name="estado"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
-              <div className="mb-4">
-                <FormLabel className="text-base">Estado</FormLabel>
-              </div>
-              {estadoOptions.map((option) => (
-                <FormField
-                  key={option.value}
-                  control={form.control}
-                  name="estado"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={option.value}
-                        className="flex flex-row items-center gap-2"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(option.value)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([
-                                    ...(field.value || []),
-                                    option.value,
-                                  ])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== option.value
-                                    ) || []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {option.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
+              <FormLabel className="text-base">Estado</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccione un estado" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {estadoOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -141,25 +81,27 @@ export function DataTableFilterForm() {
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="fechaDesde"
+              name="fecha_inicio"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm">Desde</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="fechaHasta"
+              name="fecha_fin"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm">Hasta</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
