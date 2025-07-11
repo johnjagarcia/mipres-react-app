@@ -1,7 +1,4 @@
 import { CheckCircle, CircleOff, Timer } from "lucide-react";
-import tasksData from "./tasks.json";
-
-export const tasks = tasksData;
 
 export const tipoTecOptions = [
   {
