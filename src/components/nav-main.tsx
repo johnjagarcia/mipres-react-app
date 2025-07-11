@@ -20,7 +20,7 @@ export function NavMain({
     icon?: Icon;
   }[];
 }) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <SidebarGroup>

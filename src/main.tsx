@@ -9,7 +9,7 @@ import LoginPage from "./pages/Login.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/mipres-react-app">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 

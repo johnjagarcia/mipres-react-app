@@ -17,7 +17,9 @@ export function DataTableToolbar({ onFiltersChange }: DataTableToolbarProps) {
           <IconDownload />
           Descargar
         </Button>
-        <DataTableFiltersDrawer onFiltersChange={onFiltersChange} />
+        <DataTableFiltersDrawer
+          onFiltersChange={onFiltersChange ?? (() => {})}
+        />
       </div>
     </div>
   );
