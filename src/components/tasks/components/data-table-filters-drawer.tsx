@@ -34,17 +34,32 @@ export function DataTableFiltersDrawer({
   const today = new Date();
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-  const form = useForm<z.infer<typeof FilterSchema>>({
-    defaultValues: {
+  // Recuperar filtros guardados del localStorage o usar valores por defecto
+  const getStoredFilters = () => {
+    try {
+      const stored = localStorage.getItem("dataTableFilters");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error("Error loading stored filters:", error);
+    }
+    return {
       no_id_paciente: "",
-      estado: "PENDIENTE",
+      estado: "all",
       fecha_inicio: firstDayOfMonth.toISOString().split("T")[0],
       fecha_fin: today.toISOString().split("T")[0],
-    },
+    };
+  };
+
+  const form = useForm<z.infer<typeof FilterSchema>>({
+    defaultValues: getStoredFilters(),
   });
 
   const handleApplyFilters = () => {
     const formData = form.getValues();
+    // Guardar filtros en localStorage
+    localStorage.setItem("dataTableFilters", JSON.stringify(formData));
     onFiltersChange(formData);
   };
 

@@ -63,6 +63,7 @@ export function DataTableFilterForm({ form }: DataTableFilterFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
+                  <SelectItem value="all">Todos los estados</SelectItem>
                   {estadoOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}

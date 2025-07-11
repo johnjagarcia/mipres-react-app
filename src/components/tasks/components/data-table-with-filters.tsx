@@ -7,16 +7,32 @@ import type { DispensationResponse } from "@/types/process.response";
 import React, { useState } from "react";
 import type { ProcessFilters } from "@/services/processService";
 
-// Valores por defecto para los filtros
-const defaultFilters: ProcessFilters = {
-  no_id_paciente: "",
-  estado: "PENDIENTE",
-  fecha_inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-    .toISOString()
-    .split("T")[0],
-  fecha_fin: new Date().toISOString().split("T")[0],
-  skip: 0,
-  take: 10,
+// Función para obtener filtros por defecto o guardados
+const getDefaultFilters = (): ProcessFilters => {
+  try {
+    const stored = localStorage.getItem("dataTableFilters");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return {
+        ...parsed,
+        skip: 0,
+        take: 10,
+      };
+    }
+  } catch (error) {
+    console.error("Error loading stored filters:", error);
+  }
+
+  return {
+    no_id_paciente: "",
+    estado: "all",
+    fecha_inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+      .toISOString()
+      .split("T")[0],
+    fecha_fin: new Date().toISOString().split("T")[0],
+    skip: 0,
+    take: 10,
+  };
 };
 
 // Función para crear la promesa de datos con filtros
@@ -26,7 +42,7 @@ function createDataPromise(filters: ProcessFilters) {
   if (filters.no_id_paciente) {
     params.append("no_id_paciente", filters.no_id_paciente);
   }
-  if (filters.estado) {
+  if (filters.estado && filters.estado.trim() !== "all") {
     params.append("estado", filters.estado);
   }
   if (filters.fecha_inicio) {
@@ -49,7 +65,7 @@ function createDataPromise(filters: ProcessFilters) {
 
 // Componente principal que maneja los filtros
 export function DataTableWithFilters() {
-  const [filters, setFilters] = useState<ProcessFilters>(defaultFilters);
+  const [filters, setFilters] = useState<ProcessFilters>(getDefaultFilters());
   const [data, setData] = useState<DispensationResponse["items"]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -71,7 +87,10 @@ export function DataTableWithFilters() {
   }, [filters]);
 
   const handleFiltersChange = (newFilters: ProcessFilters) => {
-    setFilters((prev) => ({ ...prev, ...newFilters, skip: 0 }));
+    const updatedFilters = { ...filters, ...newFilters, skip: 0 };
+    setFilters(updatedFilters);
+    // Guardar filtros en localStorage
+    localStorage.setItem("dataTableFilters", JSON.stringify(newFilters));
   };
 
   const handlePaginationChange = (pageIndex: number, pageSize: number) => {
