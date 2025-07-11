@@ -15,7 +15,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
